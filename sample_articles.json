@@ -1,0 +1,48 @@
+[{
+	"id": 1,
+	"type": "Article",
+	"title": "Article Title 1",
+	"content": "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium",
+	"regular_price": ".25",
+	"description": "This is an individual article purchase"
+},
+{
+	"id": 2,
+	"type": "Article",
+	"title": "Article Title 2",
+	"content": "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium",
+	"regular_price": ".22",
+	"description": "This is an individual article purchase"
+},
+{
+	"id": 3,
+	"type": "Article",
+	"title": "Article Title 3",
+	"content": "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium",
+	"regular_price": ".20",
+	"description": "This is an individual article purchase"
+},
+{
+	"id": 4,
+	"type": "Article",
+	"title": "Article Title 4",
+	"content": "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium",
+	"regular_price": ".15",
+	"description": "This is an individual article purchase"
+},
+{
+	"id": 5,
+	"type": "Article",
+	"title": "Article Title 5",
+	"content": "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium",
+	"regular_price": ".30",
+	"description": "This is an individual article purchase"
+},
+{
+	"id": 6,
+	"type": "Article",
+	"title": "Article Title 6",
+	"content": "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium",
+	"regular_price": ".10",
+	"description": "This is an individual article purchase"
+}]
