@@ -6,7 +6,6 @@
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-	<h2>Basic Peruse Example</h2>
 
 	<?php 
 
@@ -18,10 +17,10 @@
 
 
 		if(!$peruse_user){
-			echo '<a href="'.$login_link.'">Login</a>';
+			echo '<h3><a href="'.$login_link.'">Login to the Peruse demo!</a></h3>';
 		}else{
 
-			echo '<p>Hi ' . $peruse_user->first_name . ', your balance is $' . $peruse_user->balance . '! (<a href="' . $logout_link . '">Logout</a>)</p>'; 
+			echo '<h3 style="margin-left:15px">Hi ' . $peruse_user->first_name . ', your balance is $' . $peruse_user->balance . '! (<a href="' . $logout_link . '">Logout</a>)</h3>'; 
 
 
 			echo '<h4>Buy my articles:</h4>';
@@ -29,28 +28,43 @@
 			$sample_articles = json_decode(file_get_contents('sample_articles.json'));
 
 			foreach ($sample_articles as $article) {
-			    echo '<div class="article">
-			    	<h4>' . $article->title . '</h4>
-			    	<p>' . $article->content . '</p>
-			    	<button class="buy_article" data-id="' . $article->id . '">buy article for $' . $article->regular_price . '</button>
-			    	<div id="peruse_message-' . $article->id . '"></div>
-			    	</div>';
+			    echo '<div class="article"><h5>' . $article->title . '</h5><p>' . $article->content . '</p>';
+
+			    if($_GET['pId'] == $article->id){
+
+					switch ($_GET['status'] ) {
+					    case "has_product":
+					        echo "<span class='warning'>You already own this product!</span>";
+					        break;
+					    case "confirm_email":
+					        echo "<span class='danger'>Confirm product purchase via email</span>";
+					        break;
+					    case "need_payment":
+					        echo "<span class='danger'>Enter payment method to continue</span>";
+					        break;
+					    default:
+					        echo "<span class='success'>Thank you for your purchase!</span>";
+					}
+
+			    }else{
+
+			    	echo '<a href="'. current_url() .'action.php?pId='. $article->id .'">Buy article for $' . $article->regular_price . '</a>';
+
+			    }
+
+			    echo '</div>';
+
+			    	
 			} 
-
-
 		} 
 	?>
 
 
-	<div style="background-color:#eeeeee; margin-top: 200px; padding: 20px;">
+	<div id="dump">
 		<h3>Dumping grounds:</h3>
-		<div><b>Access token:</b> <?php var_dump(isset($access_token) ? $access_token : null); ?></div><br>
-		<div><b>User:</b> <?php var_dump(isset($peruse_user) ? $peruse_user : null); ?></div><br>
-		<div><b>Order:</b> <?php var_dump($order->data ? $order->data : null); ?></div>
+		<div><b>Access token:</b> <?php echo '<pre>' . json_encode(isset($access_token) ? $access_token : null) . '</pre>'; ?></div><br>
+		<div><b>User:</b> <?php echo '<pre>' . json_encode($peruse_user ? $peruse_user : null, JSON_PRETTY_PRINT) . '</pre>'; ?></div><br>
+		<div><b>Order:</b> <?php echo '<pre>' . json_encode($order->data ? $order->data : null, JSON_PRETTY_PRINT) . '</pre>'; ?></div>
 	</div>
 </body>
-
-<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-<script><?php echo 'var access_token = ' . json_encode($access_token) . ';'; ?></script>
-<script src="script.js" type="text/javascript"></script>
 </html>

@@ -7,6 +7,8 @@
 
 		private static $baseUrl = 'https://app.goperuse.com/'; 
 
+		public $clientUrl;
+
 		private $user_token;
 
 		private $auth_link;
@@ -16,6 +18,35 @@
 		private $product;
 
 		private $order;
+
+		public function __construct() {
+
+				$this->request_uri = strtok($_SERVER['REQUEST_URI'],'?');
+
+		    $this->clientUrl = "http://" . $_SERVER['HTTP_HOST'] . $this->request_uri;
+		}
+
+		private function post($route, $body) {
+
+			if(isset($_SESSION['peruse_access_token'])){
+
+				$options['body'] = json_encode($body);
+				$options['headers']['content-type'] = 'application/json';
+
+				$request = $this->provider->getAuthenticatedRequest(
+			      'POST',
+			      $this::$baseUrl . 'api/graph/v1/' . $route,
+			      $_SESSION['peruse_access_token'],
+			      $options
+			    );
+
+				$response = $this->provider->getHttpClient()->send($request);
+				return json_decode($response->getBody());
+			}
+
+			return null;
+
+		}
 
 
 		private function get($route) {
@@ -40,12 +71,11 @@
 
 			require_once 'vendor/autoload.php';
 
-
 			session_start();
 
-			define('CLIENT_ID', 'XXXXXXXXXXXXXXXX');
-			define('CLIENT_SECRET', 'XXXXXXXXXXXXXXXX');
-			define('REDIRECT_URI', 'XXXXXXXXXXXXXXXX');
+			define('CLIENT_ID', 'XXXXXXXXXXXXXXXXXXXXXXXX');
+			define('CLIENT_SECRET', 'XXXXXXXXXXXXXXXXXXXXXXXX');
+			define('REDIRECT_URI', $this->clientUrl);
 
 			if (CLIENT_ID && CLIENT_SECRET){
 			  
@@ -88,11 +118,8 @@
 
 				if (!isset($_GET['code'])) {
 
-					$selected_scope = (!empty($this->peruse_options['scope']) ? $this->peruse_options['scope'] : []);
-					$selected_scope_csv = implode(", ", $selected_scope);
-
 			    $options = [
-					   'scope' => $selected_scope_csv
+					   'scope' => ['email']
 					];
 
 			    $this->auth_link = $this->provider->getAuthorizationUrl($options);
@@ -122,10 +149,10 @@
 						$_SESSION['peruse_refresh_token'] = $access_token->getRefreshToken();
 						$_SESSION['peruse_token_exp'] = $access_token->getExpires();
 
-					  $redirect = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']; 
+				  	$redirect = $this->clientUrl; 
 
-					  header('Location:' . filter_var($redirect, FILTER_SANITIZE_URL));
-					  die();
+				  	header('Location:' . filter_var($redirect, FILTER_SANITIZE_URL));
+				  	die();
 
 				  } catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
 
@@ -139,6 +166,12 @@
 
 		}
 
+		public function clientUrl() { 
+
+  		return $this->clientUrl;
+
+  	}
+
 		public function user_token() { 
 
   		return $this->user_token;
@@ -148,6 +181,12 @@
 		public function auth_link() { 
 
   		return $this->auth_link;
+
+  	}
+
+  	public function post_product($body) { 
+
+  		return $this->post('product', $body);
 
   	}
 
@@ -189,6 +228,12 @@
 
 	$peruse->connect();
 
+	function current_url() { 
+		global $peruse;
+
+		return $peruse->clientUrl();
+	}
+
 	function peruse_user_token() { 
 		global $peruse;
 
@@ -203,9 +248,13 @@
 
 	function peruse_logout_link() {
 
-		$logout_url = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
+		return current_url() . '?logout';
+	}
 
-		return $logout_url . '?logout';
+	function post_product($body){
+		global $peruse;
+
+		return $peruse->post_product($body);
 	}
 
 	function peruse_current_user() {
