@@ -48,7 +48,7 @@ body a{
 }
 
 .article a{
-	background-color: #03A9F4;
+	background-color: #cccccc;
 	padding: 10px;
 	color: #fff;
 	text-decoration: none;
@@ -57,7 +57,7 @@ body a{
 }
 
 .article a:hover{
-	background-color: #038dcc;
+	background-color: #dddddd;
 }
 
 .article span{
@@ -79,6 +79,19 @@ body a{
 
 .article span.success{
 	background-color: #4CAF50;
+}
+
+.article_single a{
+	background-color: #03A9F4;
+	padding: 10px;
+	color: #fff;
+	text-decoration: none;
+	display: inline-block;
+	text-align: center;
+}
+
+.article_single a:hover{
+	background-color: #038dcc;
 }
 
 #dump{

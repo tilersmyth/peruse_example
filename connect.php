@@ -73,8 +73,8 @@
 
 			session_start();
 
-			define('CLIENT_ID', 'XXXXXXXXXXXXXXXXXXXXXXXX');
-			define('CLIENT_SECRET', 'XXXXXXXXXXXXXXXXXXXXXXXX');
+			define('CLIENT_ID', 'CJ1PJCVEQ000VBNDLECXWNHK2');
+			define('CLIENT_SECRET', 'jvcwx7fhrj48jajg030j1q11vxw13lvwjehps6c87x');
 			define('REDIRECT_URI', $this->clientUrl);
 
 			if (CLIENT_ID && CLIENT_SECRET){
@@ -267,6 +267,25 @@
 		global $peruse;
 
 		return $peruse->order();
+	}
+
+	function peruse_post_auth($postId, $product_type) {
+		global $peruse;
+
+		$user_logged_in = peruse_current_user();
+
+		if(!$user_logged_in){
+			return false;
+		}
+
+		$has_product = $peruse->product($postId, $product_type);
+
+		if($has_product->data && $has_product->data->authorized){
+			return true;
+		}
+
+		return false;
+
 	}
 
 ?>

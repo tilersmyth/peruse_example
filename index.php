@@ -28,29 +28,12 @@
 			$sample_articles = json_decode(file_get_contents('sample_articles.json'));
 
 			foreach ($sample_articles as $article) {
-			    echo '<div class="article"><h5>' . $article->title . '</h5><p>' . $article->content . '</p>';
 
-			    if($_GET['pId'] == $article->id){
+			    echo '<div class="article"><h5>' . $article->title . '</h5><p>' . $article->excerpt . '</p>';
 
-					switch ($_GET['status'] ) {
-					    case "has_product":
-					        echo "<span class='warning'>You already own this product!</span>";
-					        break;
-					    case "confirm_email":
-					        echo "<span class='danger'>Confirm product purchase via email</span>";
-					        break;
-					    case "need_payment":
-					        echo "<span class='danger'>Enter payment method to continue</span>";
-					        break;
-					    default:
-					        echo "<span class='success'>Thank you for your purchase!</span>";
-					}
 
-			    }else{
+			    echo '<a href="'. current_url() .'page.php?pId='. $article->id .'">Read article</a>';
 
-			    	echo '<a href="'. current_url() .'action.php?pId='. $article->id .'">Buy article for $' . $article->regular_price . '</a>';
-
-			    }
 
 			    echo '</div>';
 
